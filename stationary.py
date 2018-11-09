@@ -5,45 +5,60 @@ class Pencil:
         self.eraser_dur = eraser_dur
         self.length = length
 
+    def _degradation_cost(self, c, is_write):
+        cost = 1
+        if c == ' ' or c == '\n':
+            cost = 0
+        if is_write and c.isupper():
+            cost = 2
+        return cost
+
+    def _write_char(self, c, cost):
+        to_write = ""
+        if self.point_dur - cost >= 0:
+            to_write += c
+        elif self.length > 0:
+            self.length -= 1
+            self.point_dur += self.default_point_dur
+            to_write += c
+        self.point_dur -= cost
+        return to_write
+
     def write(self, text, paper):
         if not isinstance(text, str):
             raise TypeError("Please provide a string argument")
+        if not isinstance(paper, Paper):
+            raise TypeError("Please provide a Paper object")
 
         writeable = ""
-        for c in text:
-            cost = 1
-            if c == ' ' or c == '\n':
-                cost = 0
-            if c.isupper():
-                cost = 2
-
-            if self.point_dur - cost >= 0:
-                writeable += c
-            elif self.length > 0:
-                self.length -= 1
-                self.point_dur += self.default_point_dur
-                writeable += c
-            self.point_dur -= cost
+        for i in range(len(text)):
+            c = text[i]
+            cost = self._degradation_cost(c, True)
+            writeable += self._write_char(c, cost)
 
         paper.text += writeable
 
     def erase(self, text, paper):
         if not isinstance(text, str):
             raise TypeError("Please provide a string argument")
+        if not isinstance(paper, Paper):
+            raise TypeError("Please provide a Paper object")
 
         start = paper.text.rfind(text)
+
         if start > -1:
             erased = []
             for i in reversed(range(len(text))):
-                cost = 1
+                c = text[i]
+                cost = self._degradation_cost(c, False)
                 if text[i] == ' ' or text[i] == '\n':
-                    cost = 0
                     erased.append(text[i])
                 elif self.eraser_dur > 0:
                     erased.append(' ')
                 else:
                     erased.append(text[i])
                 self.eraser_dur -= cost
+
             erased = ''.join(reversed(erased))
             end = start + len(text)
             paper.text = paper.text[:start] + erased + paper.text[end:]
@@ -51,44 +66,32 @@ class Pencil:
     def edit(self, text, paper, start=0):
         if not isinstance(text, str):
             raise TypeError("Please provide a string argument")
+        if not isinstance(paper, Paper):
+            raise TypeError("Please provide a Paper object")
         if start >= len(paper.text):
             raise IndexError("Please provide a valid index to begin editing")
 
         end = min(start + len(text), len(paper.text))
+
         edited = ""
         for i in range(start, end):
             c = text[i - start]
-            cost = 1
-            if c == ' ' or c == '\n':
-                cost = 0
-            if c.isupper():
-                cost = 2
+            cost = self._degradation_cost(c, True)
 
-            if paper.text[i] == ' ':
-                if self.point_dur - cost >= 0:
-                    edited += c
-                    self.point_dur -= cost
-                elif self.length > 0:
-                    self.length -= 1
-                    self.point_dur += self.default_point_dur
-                    edited += c
-                    self.point_dur -= cost
-                else:
-                    edited += paper.text[i]
-            elif paper.text[i] == c:
+            if paper.text[i] == c:
                 edited += paper.text[i]
-            else:
-                cost = 1
-                if self.point_dur - cost >= 0:
-                    edited += '@'
-                    self.point_dur -= cost
-                elif self.length > 0:
-                    self.length -= 1
-                    self.point_dur += self.default_point_dur
-                    edited += '@'
-                    self.point_dur -= cost
-                else:
+            elif self.point_dur - cost < 0 and self.length == 0:
+                if cost < 2:
                     edited += paper.text[i]
+                else:
+                    cost = self._degradation_cost('@', True)
+                    edited += self._write_char('@', cost)
+            else:
+                if paper.text[i] == ' ':
+                    edited += self._write_char(c, cost)
+                else:
+                    cost = self._degradation_cost('@', True)
+                    edited += self._write_char('@', cost)
 
         paper.text = paper.text[:start] + edited + paper.text[end:]
 
@@ -96,6 +99,3 @@ class Pencil:
 class Paper:
     def __init__(self):
         self.text = ""
-
-    # def append(self, new_text):
-    #     self.text += new_text

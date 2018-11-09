@@ -18,6 +18,10 @@ def test_write_raises_exception_on_nonstring_argument(pencil, paper):
     with pytest.raises(TypeError):
         pencil.write(100, paper)
 
+def test_write_raises_exception_on_nonpaper_argument(pencil, paper):
+    with pytest.raises(TypeError):
+        pencil.write("apple", 100)
+
 def test_write_initial(pencil, paper):
     pencil.write("She sells sea shells", paper)
     assert paper.text == "She sells sea shells"

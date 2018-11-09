@@ -18,6 +18,10 @@ def test_erase_raises_exception_on_nonstring_argument(pencil, paper):
     with pytest.raises(TypeError):
         pencil.erase(100, paper)
 
+def test_erase_raises_exception_on_nonpaper_argument(pencil, paper):
+    with pytest.raises(TypeError):
+        pencil.erase("apple", 100)
+
 def test_erase_basic(pencil, paper):
     pencil.write("Bonjour madame", paper)
     pencil.erase("madame", paper)

@@ -18,6 +18,10 @@ def test_edit_raises_exception_on_nonstring_argument(pencil, paper):
     with pytest.raises(TypeError):
         pencil.edit(100, paper, 3)
 
+def test_edit_raises_exception_on_nonpaper_argument(pencil, paper):
+    with pytest.raises(TypeError):
+        pencil.edit("apple", 100, 3)
+
 def test_edit_raises_index_out_of_bounds_exception(pencil, paper):
     with pytest.raises(IndexError):
         pencil.edit("apple", paper, 3)
