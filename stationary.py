@@ -25,14 +25,22 @@ class Pencil:
                 writeable += c
             self.point_dur -= cost
 
-        paper.append(writeable)
+        paper.text += writeable
 
-    # def sharpen(self):
+    def erase(self, text, paper):
+        if not isinstance(text, str):
+            raise TypeError('Please provide a string argument')
+
+        start = paper.text.rfind(text)
+        if start > -1:
+            blanks = " " * len(text)
+            end = start + len(text)
+            paper.text = paper.text[:start] + blanks + paper.text[end:]
 
 
 class Paper:
     def __init__(self):
         self.text = ""
 
-    def append(self, new_text):
-        self.text += new_text
+    # def append(self, new_text):
+    #     self.text += new_text
