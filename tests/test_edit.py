@@ -42,10 +42,10 @@ def test_edit_collision_out_of_bounds(pencil, paper):
 
 def test_edit_with_point_degradation(paper):
     pencil = Pencil(12, 0)
-    pencil.write("Life is good", paper)
+    pencil.write("life is good", paper)
     pencil.erase("good", paper)
-    pencil.edit("okay", paper, 9)
-    assert paper.text == "Life is ok  "
+    pencil.edit("okay", paper, 8)
+    assert paper.text == "life is ok  "
 
 def test_edit_whitespace_collision(pencil, paper):
     pencil.write("Conditional\nby weather", paper)
@@ -53,7 +53,7 @@ def test_edit_whitespace_collision(pencil, paper):
     assert paper.text == "Condition@@\n@@r@@a@@er"
 
 def test_edit_collision_and_point_degradation(paper):
-    pencil = Pencil(4, 0)
+    pencil = Pencil(5, 0)
     pencil.write("Top", paper)
     pencil.edit("Bot", paper)
     assert paper.text == "@op"

@@ -55,7 +55,6 @@ class Pencil:
             raise IndexError("Please provide a valid index to begin editing")
 
         end = min(start + len(text), len(paper.text))
-        print(start, end)
         edited = ""
         for i in range(start, end):
             c = text[i - start]
@@ -88,6 +87,8 @@ class Pencil:
                     self.point_dur += self.default_point_dur
                     edited += '@'
                     self.point_dur -= cost
+                else:
+                    edited += paper.text[i]
 
         paper.text = paper.text[:start] + edited + paper.text[end:]
 
