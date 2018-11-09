@@ -4,4 +4,8 @@ init:
 test:
 	py.test tests
 
-.PHONY: init tests
+all:
+	pip install -r requirements.txt
+	py.test tests
+
+.PHONY: init tests all

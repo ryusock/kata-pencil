@@ -102,5 +102,5 @@ class Pencil:
 
 
 class Paper:
-    def __init__(self):
-        self.text = ""
+    def __init__(self, text=""):
+        self.text = text

@@ -57,8 +57,8 @@ def test_edit_with_point_degradation(paper):
 
 def test_edit_whitespace_collision(pencil, paper):
     pencil.write("Conditional\nby weather", paper)
-    pencil.edit( "Conditioner\nfor sale", paper)
-    assert paper.text == "Condition@@\n@@r@@a@@er"
+    pencil.edit( "Conditioner\nfor sale\n", paper)
+    assert paper.text == "Condition@@\n@@r@@a@@@r"
 
 def test_edit_collision_and_point_degradation(paper):
     """Recall that an uppercase letter has write cost of 2. This pencil
