@@ -29,8 +29,8 @@ Enter `pencil.erase(text, paper)` to erase the last matching pattern of `text` f
 
 Enter `pencil.edit(text, paper, start)` to write over a `paper` instance's text with some other `text` at starting index `start`. There were some likely intentional ambiguities in the specs, so I made some key assumptions with my implementation:
 - If an edit goes over the length of the paper (e.g. see `test_edit_collision_out_of_bounds` in `test_edit.py`), the pencil attempts to edit whatever space is available on the paper before giving up. Doing so does *not* raise an exception.
-- Edits are still technically writes, so the same rules on point durability and length for writing apply here. If a pencil's total durability is used up, it can no longer edit (write new characters or @'s).
-- While editing *over* a whitespace with a non-whitespace character means the latter is written, editing a whitespace over a non-whitespace doesn't make sense. That is considered a collision and results in a @ character.
+- Edits can still technically be writes, so the same rules on point durability and length for writing apply here. If a pencil's total durability is used up, it can no longer write new characters or @'s. If there's no need write new characters or @'s there is no degradation.
+- While editing *over* a whitespace with a non-whitespace character means the latter is written, editing a whitespace over a non-whitespace doesn't make sense. That is considered a collision and so the @ is written over the non-whitespace character.
 - Writing a collision (@) *still degrades the pencil*. Following convention above, the degradation cost is still one. This created some interesting test cases where a pencil couldn't write in a capital, but a @ was fine. (See `test_edit_collision_and_point_degradation` in `test_edit.py`).
 
 ### Paper
