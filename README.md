@@ -2,7 +2,7 @@
 This code kata simulates a graphite pencil.
 
 ## Dependencies
-Python 2.7 or 3.4+. Assuming running on OS X.
+Python 2.7 or 3.4+. Assuming running on Mac.
 
 This project uses the Python package `pytest` for testing. Ensure that the Python package installer `pip` is installed beforehand.
 
