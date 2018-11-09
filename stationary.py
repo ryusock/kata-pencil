@@ -1,5 +1,5 @@
 class Pencil:
-    def __init__(self, point_dur=10, length=5, eraser_dur=10):
+    def __init__(self, point_dur=10, length=5, eraser_dur=24):
         self.point_dur = point_dur
         self.default_point_dur = point_dur
         self.eraser_dur = eraser_dur
@@ -33,9 +33,20 @@ class Pencil:
 
         start = paper.text.rfind(text)
         if start > -1:
-            blanks = " " * len(text)
+            erased = []
+            for i in reversed(range(len(text))):
+                cost = 1
+                if text[i] == ' ' or text[i] == '\n':
+                    cost = 0
+                    erased.append(text[i])
+                elif self.eraser_dur > 0:
+                    erased.append(' ')
+                else:
+                    erased.append(text[i])
+                self.eraser_dur -= cost
+            erased = ''.join(reversed(erased))
             end = start + len(text)
-            paper.text = paper.text[:start] + blanks + paper.text[end:]
+            paper.text = paper.text[:start] + erased + paper.text[end:]
 
 
 class Paper:
