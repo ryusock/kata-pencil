@@ -6,7 +6,7 @@ from stationary import Pencil, Paper
 
 @pytest.fixture
 def paper():
-    '''Returns a black sheet of Paper'''
+    '''Returns a blank sheet of Paper'''
     return Paper()
 
 @pytest.fixture
