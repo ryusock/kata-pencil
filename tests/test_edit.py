@@ -39,6 +39,10 @@ def test_edit_collision(pencil, paper):
     assert paper.text == "An artich@k@ay keeps the doctor away"
 
 def test_edit_collision_out_of_bounds(pencil, paper):
+    """Although there is not enough space to write "artichoke"
+    on the paper, EDIT will attempt the writeover until the end
+    of the text, and then give up.
+    """
     pencil.write("An apple", paper)
     pencil.erase("apple", paper)
     pencil.edit("artichoke", paper, 2)
@@ -57,6 +61,10 @@ def test_edit_whitespace_collision(pencil, paper):
     assert paper.text == "Condition@@\n@@r@@a@@er"
 
 def test_edit_collision_and_point_degradation(paper):
+    """Recall that an uppercase letter has write cost of 2. This pencil
+    has enough durability to write "Top", leaving a durability of 1. That's
+     enough to write '@' to replace 'T' butnot 'p'
+     """
     pencil = Pencil(5, 0)
     pencil.write("Top", paper)
     pencil.edit("Bot", paper)

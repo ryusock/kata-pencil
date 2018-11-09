@@ -6,6 +6,7 @@ class Pencil:
         self.length = length
 
     def _degradation_cost(self, c, is_write):
+        """Returns the point/eraser degradation cost of writing/erasing a char C"""
         cost = 1
         if c == ' ' or c == '\n':
             cost = 0
@@ -14,6 +15,7 @@ class Pencil:
         return cost
 
     def _write_char(self, c, cost):
+        """Degrades the Pencil by COST for writing C and returns char to write"""
         to_write = ""
         if self.point_dur - cost >= 0:
             to_write += c
@@ -25,6 +27,7 @@ class Pencil:
         return to_write
 
     def write(self, text, paper):
+        """Writes a TEXT onto a PAPER"""
         if not isinstance(text, str):
             raise TypeError("Please provide a string argument")
         if not isinstance(paper, Paper):
@@ -39,6 +42,7 @@ class Pencil:
         paper.text += writeable
 
     def erase(self, text, paper):
+        """Erases a TEXT, if found, from a PAPER"""
         if not isinstance(text, str):
             raise TypeError("Please provide a string argument")
         if not isinstance(paper, Paper):
@@ -64,6 +68,7 @@ class Pencil:
             paper.text = paper.text[:start] + erased + paper.text[end:]
 
     def edit(self, text, paper, start=0):
+        """Writes TEXT over existing text on a PAPER, if possible"""
         if not isinstance(text, str):
             raise TypeError("Please provide a string argument")
         if not isinstance(paper, Paper):
